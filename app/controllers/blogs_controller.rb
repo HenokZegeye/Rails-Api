@@ -5,11 +5,13 @@ class BlogsController < ApplicationController
   # GET /blogs.json
   def index
     @blogs = Blog.all
+    render json: @blogs, status: :ok
   end
 
   # GET /blogs/1
   # GET /blogs/1.json
   def show
+    render json: @blog
   end
 
   # POST /blogs
@@ -18,7 +20,7 @@ class BlogsController < ApplicationController
     @blog = Blog.new(blog_params)
 
     if @blog.save
-      render :show, status: :created, location: @blog
+      render json: @blog, status: :created, location: @blog
     else
       render json: @blog.errors, status: :unprocessable_entity
     end
@@ -28,7 +30,7 @@ class BlogsController < ApplicationController
   # PATCH/PUT /blogs/1.json
   def update
     if @blog.update(blog_params)
-      render :show, status: :ok, location: @blog
+      render json: @blog
     else
       render json: @blog.errors, status: :unprocessable_entity
     end
@@ -44,6 +46,9 @@ class BlogsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_blog
       @blog = Blog.find(params[:id])
+      render json: {
+        error: 'not found'
+      },status: 404 if @blog.nil?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
