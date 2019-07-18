@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :blog do
-    title { "MyString" }
-    body { "MyString" }
-    image { "MyString" }
-    description { "MyText" }
+    title { FFaker::Name.name }
+    body { FFaker::Lorem.phrase }
+    image { FFaker::Name.name }
+    description { FFaker::Lorem.phrase }
   end
 end

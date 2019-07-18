@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :comment do
-    name { "MyString" }
-    comment { "MyText" }
-    blog { nil }
+    name { FFaker::Name.name }
+    comment { FFaker::Lorem.phrase }
+    association :blog
   end
 end
