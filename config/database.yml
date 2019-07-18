@@ -10,14 +10,14 @@ default: &default
 
 development:
   <<: *default
-  database: demo_app_api_development
+  database: demo_app_api_development_v1
 
 test:
   <<: *default
-  database: demo_app_api_development
+  database: demo_app_api_development_v1
 
 production:
   <<: *default
-  database: demo_app_api_development
+  database: demo_app_api_development_v1
   #username: app
   #password: <%= ENV['APP_DATABASE_PASSWORD'] %>
