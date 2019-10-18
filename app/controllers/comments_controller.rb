@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :set_blog
+  before_action :set_blog, only: [:index, :create]
   before_action :set_comment, only: [:show, :update, :destroy]
   # GET /comments
   # GET /comments.json
@@ -37,7 +37,6 @@ class CommentsController < ApplicationController
     if @comment.update(comment_params)
       render json: @comment, status: :ok
     else
-      
       render json: @comment.errors, status: :unprocessable_entity
     end
   end
@@ -52,22 +51,15 @@ class CommentsController < ApplicationController
 
     def set_blog
       @blog = Blog.find(params[:blog_id])
-      render json: {
-        error: 'not found'
-        }, status: 404 if @blog.nil?
-          
     end
     
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
       @comment = Comment.find(params[:id])
-      render json: {
-        error: 'not found'
-      },status: 404 if @comment.nil?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def comment_params
-      params.permit(:name, :comment, :blog_id)
+     params.require(:comment).permit(:name, :comment, :blog_id)
     end
 end

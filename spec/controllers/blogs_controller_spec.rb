@@ -22,10 +22,22 @@ RSpec.describe BlogsController, type: :controller do
   let(:valid_session) { {} }
 
   describe "GET #index" do
+    before do
+      get :index, params: {}, session: valid_session
+    end
+    
     it "returns a success response" do
       blog = Blog.create! valid_attributes
-      get :index, params: {}, session: valid_session
       expect(response).to be_successful
+    end
+
+    it 'should has json content type' do
+      expect(response.content_type).to eq("application/json")
+    end
+
+    it 'returns all the blogs' do
+      parsed_blog = JSON.parse(response.body)
+      expect(parsed_blog['data'].length).to eq(parsed_blog['count'])  
     end
   end
 
@@ -46,11 +58,10 @@ RSpec.describe BlogsController, type: :controller do
       end
 
       it "renders a JSON response with the new blog" do
-
         post :create, params: {blog: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(blog_url(Blog.last))
+        #expect(response.location).to eq(blog_url(Blog.last))
       end
     end
 
@@ -67,14 +78,21 @@ RSpec.describe BlogsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+          title:  FFaker::Name.name, 
+          body:  FFaker::Lorem.sentence, 
+          image:  FFaker::Name.name, 
+          description:  FFaker::Lorem.phrase 
+        }
       }
 
       it "updates the requested blog" do
         blog = Blog.create! valid_attributes
         put :update, params: {id: blog.to_param, blog: new_attributes}, session: valid_session
         blog.reload
-        skip("Add assertions for updated state")
+        new_attributes.each_pair do |key, value|
+          expect(blog[key]).to eq(value)  
+        end
       end
 
       it "renders a JSON response with the blog" do

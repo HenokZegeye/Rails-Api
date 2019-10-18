@@ -5,7 +5,13 @@ class BlogsController < ApplicationController
   # GET /blogs.json
   def index
     @blogs = Blog.all
-    render json: @blogs, status: :ok
+    #render json: @blogs, status: :ok
+    render json: {
+      status: 'Success',
+      message: 'blogs loaded',
+      data: @blogs,
+      count: @blogs.length
+    },status: :ok
   end
 
   # GET /blogs/1
